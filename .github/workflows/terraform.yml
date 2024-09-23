@@ -8,7 +8,7 @@ permissions:
 jobs:
   terraform:
     name: 'Terraform'
-    runs-on: self-hosted
+    runs-on: [Asg]
     environment: production
     defaults:
       run:
