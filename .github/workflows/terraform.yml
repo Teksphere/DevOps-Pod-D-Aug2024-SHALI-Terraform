@@ -18,32 +18,25 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Debug Information
-      run: |
-        echo "Current directory: $PWD"
-        echo "Contents of current directory:"
-        ls -la
-        echo "Contents of modules directory:"
-        ls -la modules || echo "modules directory not found"
-        echo "Contents of modules/ec2_asg directory:"
-        ls -la modules/ec2_asg || echo "modules/ec2_asg directory not found"
-        echo "All .tf files in the current directory and subdirectories:"
-        find . -name "*.tf"
-
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v2
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - name: Terraform Format
+      run: |
+        terraform fmt -recursive
+        git diff --exit-code || (echo "Terraform files are not formatted. Run 'terraform fmt -recursive' to fix." && exit 1)
 
     - name: Terraform Init
       run: terraform init
 
-    - name: Terraform Format
-      run: terraform fmt -check
+    - name: Terraform Validate
+      run: terraform validate
 
     - name: Terraform Plan
       run: terraform plan -out=tfplan
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false
+      run: terraform apply -auto-approve -input=false tfplan
