@@ -15,7 +15,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "The key pair name to use for the EC2 instance or ASG"
   type        = string
-  default = "pkr-key"
+  default = "uni-key"
 }
 variable "use_asg" {
   description = "Whether to use an Autoscaling Group (true) or standalone EC2 instance (false)"
