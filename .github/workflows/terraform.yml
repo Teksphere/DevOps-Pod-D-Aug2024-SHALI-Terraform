@@ -13,6 +13,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: ./Terraform
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -22,10 +23,12 @@ jobs:
         echo "Current directory: $PWD"
         echo "Contents of current directory:"
         ls -la
-        echo "All .tf files in the repository:"
+        echo "Contents of modules directory:"
+        ls -la modules || echo "modules directory not found"
+        echo "Contents of modules/ec2_asg directory:"
+        ls -la modules/ec2_asg || echo "modules/ec2_asg directory not found"
+        echo "All .tf files in the current directory and subdirectories:"
         find . -name "*.tf"
-        echo "Git status:"
-        git status
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -33,17 +36,13 @@ jobs:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: Terraform Init
-      run: |
-        echo "Running terraform init in directory: $PWD"
-        terraform init
+      run: terraform init
 
     - name: Terraform Format
       run: terraform fmt -check
 
     - name: Terraform Plan
-      run: |
-        echo "Running terraform plan in directory: $PWD"
-        terraform plan -out=tfplan
+      run: terraform plan -out=tfplan
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
