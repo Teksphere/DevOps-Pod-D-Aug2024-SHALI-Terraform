@@ -24,13 +24,11 @@ variable "security_group_ids" {
 variable "name_prefix" {
   description = "Prefix for the instance name tag"
   type        = string
-  default = shali
 }
 
 variable "environment" {
   description = "Environment (sandbox, staging, production)"
   type        = string
-  default = prod
 }
 
 variable "tags" {
