@@ -48,13 +48,11 @@ variable "instance_count" {
 variable "name_prefix" {
   description = "Prefix for the instance name tag"
   type        = string
-  default = "shali"
 }
 
 variable "environment" {
   description = "Environment (e.g., sandbox, staging, production)"
   type        = string
-  default = "prod"
 }
 
 variable "tags" {
