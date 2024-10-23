@@ -57,7 +57,7 @@ module "network" {
   instance_type      = var.instance_type
   key_name           = var.key_name
   security_group_ids = [module.security.security_ext]
-  name_prefix        = "shali"
-  environment        = "prod"
+  name_prefix        = var.name_prefix
+  environment        = var.environment
   tags               = var.tags
 }
