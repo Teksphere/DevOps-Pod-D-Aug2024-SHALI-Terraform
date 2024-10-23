@@ -21,6 +21,7 @@ jobs:
   terraform:
     name: 'Terraform Workflow'
     runs-on: ubuntu-latest
+    environment: shali-prod
     defaults:
       run:
         shell: bash
