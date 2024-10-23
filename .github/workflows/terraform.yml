@@ -1,10 +1,15 @@
-name: 'Terraform and Security Scans'
-
+name: Terraform and Security Scans
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 on:
   push:
     branches:
       - main
       - feature/*
+    paths:
+      - '.github/workflows/**'
   pull_request:
   schedule:
     - cron: '16 3 * * 3'  # Schedule for tfsec scans
@@ -16,7 +21,7 @@ jobs:
   terraform:
     name: 'Terraform Workflow'
     runs-on: ubuntu-latest
-    environment: prod
+    environment: shali-prod
     defaults:
       run:
         shell: bash
@@ -34,11 +39,6 @@ jobs:
           echo "Git status:"
           git status
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
       - name: Terraform Init
         run: |
           echo "Running terraform init in directory: $PWD"
@@ -51,21 +51,6 @@ jobs:
         run: |
           echo "Running terraform plan in directory: $PWD"
           terraform plan -out=tfplan
-
-      - name: Manual Approval
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        id: approval
-        uses: trstringer/manual-approval@v1
-        with:
-          approvers: darey-io, uzukwujp
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          minimum-approvals: 1
-          issue-title: "Manual approval required for Terraform pipeline"
-          issue-body: |
-            Workflow is pending manual review.
-            URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            Required approvers: [darey-io, uzukwujp]
-            Respond "approved", "approve", "lgtm", "yes" to continue workflow or "denied", "deny", "no" to cancel
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'

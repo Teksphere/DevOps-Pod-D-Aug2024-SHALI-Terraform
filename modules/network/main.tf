@@ -20,7 +20,7 @@ resource "aws_subnet" "main" {
 
 data "aws_ami" "latest_packer" {
   most_recent = true
-  owners      = ["099720109477"] # Canonical
+  owners      = ["679593333241"] # Canonical
 
   filter {
     name   = "name"
