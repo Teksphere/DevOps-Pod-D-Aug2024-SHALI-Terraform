@@ -10,7 +10,9 @@ on:
       - feature/*
     paths:
       - '.github/workflows/**'
-  
+  pull_request:
+  schedule:
+    - cron: '16 3 * * 3'  # Schedule for tfsec scans
 
 permissions:
   contents: read
@@ -19,7 +21,6 @@ jobs:
   terraform:
     name: 'Terraform Workflow'
     runs-on: ubuntu-latest
-    environment: shali-prod
     defaults:
       run:
         shell: bash
