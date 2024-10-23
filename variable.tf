@@ -53,7 +53,6 @@ variable "name_prefix" {
 variable "environment" {
   description = "Environment (e.g., sandbox, staging, production)"
   type        = string
-  default = prod
 }
 
 variable "tags" {
