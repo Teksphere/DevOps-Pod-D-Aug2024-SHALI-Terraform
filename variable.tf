@@ -45,16 +45,6 @@ variable "instance_count" {
   default     = 1
 }
 
-variable "name_prefix" {
-  description = "Prefix for the instance name tag"
-  type        = string
-}
-
-variable "environment" {
-  description = "Environment (e.g., sandbox, staging, production)"
-  type        = string
-}
-
 variable "tags" {
   description = "Additional tags for the instance"
   type        = map(string)
