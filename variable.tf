@@ -48,7 +48,6 @@ variable "instance_count" {
 variable "name_prefix" {
   description = "Prefix for the instance name tag"
   type        = string
-  default = shali
 }
 
 variable "environment" {
